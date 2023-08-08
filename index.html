@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-route/1.8.3/angular-route.min.js"
+        integrity="sha512-y1qD3hz/IAf8W4+/UMLZ+CN6LIoUGi7srWJ3r1R17Hid8x0yXe+1B5ZelkaL1Mjzedzu0Cg3HBvDG02SAgSzBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://kit.fontawesome.com/10a8c2680c.js" crossorigin="anonymous"></script>
+    <script src="controllers/HomeController.js"></script>
+    <script src="controllers/TestController.js"></script>
+    <script src="controllers/AController.js"></script>
+    <script src="controllers/ProductController.js"></script>
+    <title>Document</title>
+</head>
+
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .nav-item {
+        z-index: 99999999;
+    }
+
+    .form-text-link {
+        text-decoration: underline;
+        cursor: pointer;
+        color: rgb(86, 86, 246);
+    }
+
+    .form-text-link:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+
+    .navbar-nav {
+        font-size: 18px;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .nav-link {
+        position: relative;
+    }
+
+    .navbar-number {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background-color: rgba(0, 0, 0, .55);
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 16px;
+        color: white;
+        font-size: 12px;
+    }
+
+    .navbar-icon {
+        font-size: 24px;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .nav-item:hover {
+        transform: translateY(-1px);
+    }
+
+    .modal-content_cart {
+        top: 38px;
+        right: -400px;
+    }
+
+    .cart-item_img {
+        width: 100px;
+        height: 100px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        overflow: hidden;
+    }
+
+    .cart-item+.cart-item {
+        margin-top: 20px;
+    }
+
+    .slide-show-img {
+        width: 100%;
+        height: 400px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .banner-home_img {
+        width: 100%;
+        padding-top: 40%;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .banner-home_title {
+        font-size: 30px;
+    }
+
+    .banner-home_name {
+        font-size: 50px;
+    }
+
+    .banner-home_body {
+        font-size: 20px;
+    }
+
+    .footer-name {
+        font-size: 24px;
+        font-weight: 400;
+    }
+
+    .footer-item {
+        cursor: pointer;
+        color: #7b7b7b;
+        display: block;
+        text-decoration: none;
+    }
+
+    .footer-item:hover {
+        opacity: 0.8;
+        color: #7b7b7b;
+    }
+
+    .card-img-top {
+        height: 400px;
+    }
+</style>
+
+<body ng-app="myApp" ng-controller="myApp">
+    <!-- Navbar -->
+    <div class="row" style="background-color: antiquewhite;">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <div class="collapse navbar-collapse" id="collapsibleNavId">
+                    <ul class="navbar-nav me-auto mt-2 mt-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" aria-current="page">Home <span
+                                    class="visually-hidden">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex my-2 my-lg-0">
+                        <ul class="navbar-nav me-auto mt-2 mt-lg-0">
+                            <!-- Button trigger modal Login -->
+                            <li class="nav-item" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#exampleLogin" ng-if="user==undefined">
+                                <a class="nav-link">Login</a>
+                            </li>
+                            <li class="nav-item dropdown" ng-if="user">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{user.email}}
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown" ng-click="logout()">
+                                    <li><a class="dropdown-item">Logout</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link">
+                                    <div class="navbar-icon">
+                                        <i class="fa-solid fa-heart"></i>
+                                    </div>
+                                    <div class="navbar-number">1</div>
+                                </a>
+                            </li>
+                            <!-- Button trigger modal Cart-->
+                            <li class="nav-item" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#exampleCart">
+                                <a class="nav-link">
+                                    <div class="navbar-icon">
+                                        <i class="fa-solid fa-bag-shopping"></i>
+                                    </div>
+                                    <div class="navbar-number" ng-bind="numberCart"></div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Slideshow -->
+    <div id="carouselExampleIndicators" class="carousel slide mb-5" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="slide-show-img" style="background-image: url(1.jpg);"></div>
+            </div>
+            <div class="carousel-item">
+                <div class="slide-show-img" style="background-image: url(1.jpg);"></div>
+            </div>
+            <div class="carousel-item">
+                <div class="slide-show-img" style="background-image: url(1.jpg);"></div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Content -->
+    <div class="" ng-view></div>
+
+    <!-- Footer -->
+    <div class="row">
+        <div class="col-4 d-flex flex-column align-items-center ">
+            <div class="footer-name">aeeaeaeae</div>
+            <div class="footer-list">
+                <a class="footer-item">aeaeaeae</a>
+                <a class="footer-item">aeaeaeae</a>
+                <a class="footer-item">aeaeaeae</a>
+                <a class="footer-item">aeaeaeae</a>
+            </div>
+        </div>
+        <div class="col-4 d-flex flex-column align-items-center ">
+            <div class="footer-name">aeeaeaeae</div>
+            <div class="footer-list">
+                <a class="footer-item">aeaeaeae</a>
+                <a class="footer-item">aeaeaeae</a>
+                <a class="footer-item">aeaeaeae</a>
+                <a class="footer-item">aeaeaeae</a>
+            </div>
+        </div>
+        <div class="col-4 d-flex flex-column align-items-center ">
+            <div class="footer-name">aeeaeaeae</div>
+            <div class="footer-list">
+                <a class="footer-item">aeaeaeae</a>
+                <a class="footer-item">aeaeaeae</a>
+                <a class="footer-item">aeaeaeae</a>
+                <a class="footer-item">aeaeaeae</a>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Login -->
+    <div class="modal fade" id="exampleLogin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="" class="form-label">Email</label>
+                        <input type="text" class="form-control" aria-describedby="" placeholder="abc@gmail.com"
+                            ng-model="inputLogin.email">
+                        <small class="text-danger" ng-if="validate.email">{{validate.email}}</small>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Password</label>
+                        <input type="password" class="form-control" aria-describedby="" placeholder="password"
+                            ng-model="inputLogin.password">
+                        <small class="text-danger" ng-if="validate.password">{{validate.password}}</small>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-between">
+                        <p class="form-text-link"> Quên mật khẩu</p>
+                        <p class="form-text-link form-forgot-password" data-bs-target="#exampleRegister"
+                            data-bs-toggle="modal" data-bs-dismiss="modal">Đăng ký tài khoản</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" ng-click="login()">Đăng nhập</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Register -->
+    <div class="modal fade" id="exampleRegister" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">Register</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="" class="form-label">Email</label>
+                        <input type="text" class="form-control" aria-describedby="emailHelpId"
+                            placeholder="abc@gmail.com" ng-model="inputReg.email">
+                        <small class="text-danger" ng-if="validate.password">{{validate.email}}</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Password</label>
+                        <input type="password" class="form-control" aria-describedby="" placeholder="password"
+                            ng-model="inputReg.password">
+                        <small class="text-danger" ng-if="validate.password">{{validate.password}}</small>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-between">
+                        <p class="form-text-link form-forgot-password" data-bs-target="#exampleLogin"
+                            data-bs-toggle="modal" data-bs-dismiss="modal">Đã có tài khoản</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" ng-click="register()">Đăng ký</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Cart -->
+    <div class="modal fade" id="exampleCart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-content_cart" ng-hide="cart.length == 0">
+                <div class="modal-body">
+                    <div class="cart-list">
+                        <div class="d-flex cart-item" ng-repeat="item in cart">
+                            <div class="cart-item_img me-3 rounded-2" style="background-image: url(img/{{item.img}});">
+                            </div>
+                            <div class="">
+                                <div class="cart-item_name">{{item.ten}}</div>
+                                <div class="cart-item_qty" style="color: rgb(134, 134, 134);">Qty: {{item.qty}}</div>
+                                <div class="cart-item_price" style="color: rgb(160, 160, 160);">{{ item.qty * item.gia |
+                                    currency:"VNĐ ":0}}</div>
+                            </div>
+                            <button type="button" class="btn-close ms-auto" aria-label="Close"
+                                ng-click="removeCart(item.id)"></button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="modal-body d-flex justify-content-between">
+                    <div class="fw-bolder">Thành tiền: </div>
+                    <div class="">{{total | currency:"VNĐ ":0}}</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark">View cart</button>
+                    <button type="button" class="btn btn-dark">Check out</button>
+                </div>
+            </div>
+            <div class="modal-content modal-content_cart" ng-show="cart.length == 0">
+                <div class="modal-header">
+                    <h5 class="modal-title">Không có sản phẩm nào trong giỏ hàng</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        var app = angular.module('myApp', ['ngRoute'])
+        app.config(function ($routeProvider) {
+            $routeProvider
+                .when('/', {
+                    templateUrl: 'view/home.html',
+                    controller: HomeController,
+                })
+                .when('/admin', {
+                    templateUrl: 'view/product.html',
+                    controller: ProductController,
+                })
+
+        })
+        app.filter('hang', function () {
+            return function (input) {
+                if (input == 1 || input == "1") {
+                    return 'Nokia'
+                }
+                if (input == 2 || input == "2") {
+                    return 'Apple'
+                }
+                if (input == 3 || input == "3") {
+                    return 'SamSung'
+                }
+
+            }
+        })
+
+        app.controller('myApp', async function ($scope, $http) {
+            var apiURL = 'http://localhost:3000/products';
+            $scope.total = 0
+            $scope.cart = []
+            $scope.cartId = []
+
+            if (localStorage.getItem('cart')) $scope.cartId = JSON.parse(localStorage.getItem("cart"))
+
+            $scope.cart = await Promise.all($scope.cartId.map(async (e) => {
+                var item
+                await $http.get(apiURL + '/' + e.id)
+                    .then(res => {
+                        return res.data
+                    })
+                    .then(product => {
+                        product.qty = e.qty
+                        item = product
+                    })
+                return item
+            }))
+
+            $scope.numberCart = $scope.cart.length
+
+            $scope.inputReg = {
+                email: "",
+                password: ""
+            }
+            
+            $scope.inputLogin = {
+                email: "",
+                password: ""
+            }
+            
+            if (localStorage.getItem('user.id')) {
+                $scope.user = {
+                    id: localStorage.getItem('user.id'),
+                    email: localStorage.getItem('user.email'),
+                    role: localStorage.getItem('user.role'),
+                }
+            }
+
+            $scope.login = () => {
+                let check = true
+                $scope.validate = {
+                    email: "",
+                    password: ""
+                }
+                if ($scope.inputLogin.email == "") {
+                    $scope.validate.email = "Trường email không được để trống!"
+                    check = false
+                } else if (!$scope.inputLogin.email.includes("@")) {
+                    $scope.validate.email = "Trường email phải có định dạng email!"
+                    check = false
+                }
+
+                if ($scope.inputLogin.password == "") {
+                    $scope.validate.password = "Trường password không được để trống!"
+                    check = false
+                } else if ($scope.inputLogin.password.length < 6) {
+                    $scope.validate.password = "Trường password phải có ít nhất 6 ký tự!"
+                    check = false
+                }
+
+                if (check) {
+                    $http.get('http://localhost:3000/users')
+                        .then(res => {
+                            let users = res.data
+                            users.forEach(user => {
+                                if (user.email == $scope.inputLogin.email) {
+                                    if (user.password == $scope.inputLogin.password) {
+                                        localStorage.setItem("user.email", user.email);
+                                        localStorage.setItem("user.role", user.role);
+                                        localStorage.setItem("user.id", user.id);
+                                        $scope.user = {
+                                            id: localStorage.getItem('user.id'),
+                                            email: localStorage.getItem('user.email'),
+                                            role: localStorage.getItem('user.role'),
+                                        }
+                                        document.querySelector('#exampleLogin').querySelector('.btn-close').click()
+                                        check = false
+                                    } else {
+                                        $scope.validate.password = "Password không chính xác!"
+                                        check = false
+                                    }
+                                }
+                            });
+                            if (check) {
+                                $scope.validate.email = "Tài khoản không tồn tại!"
+                            }
+                        })
+                }
+            }
+
+            $scope.logout = () => {
+                localStorage.removeItem('user.id')
+                localStorage.removeItem('user.email')
+                localStorage.removeItem('user.role')
+                $scope.user = undefined
+            }
+
+            $scope.addCart = (id) => {
+                $http.get('http://localhost:3000/products/' + id)
+                    .then(res => {
+                        let product = res.data
+                        let check = true
+                        product = {
+                            id: product.id,
+                            qty: 1,
+                            ten: product.ten,
+                            gia: product.gia,
+                            img: product.img
+                        }
+                        $scope.cart.forEach((item, index) => {
+                            if (item.id == product.id) {
+                                $scope.cart[index].qty++
+                                $scope.cartId[index].qty++
+                                check = false
+                            }
+                        });
+                        if (check) {
+                            $scope.cart.push(product)
+                            $scope.cartId.push({
+                                id: product.id,
+                                qty: 1
+                            })
+                        }
+                        localStorage.setItem('cart', JSON.stringify($scope.cartId))
+                        $scope.numberCart = $scope.cart.length
+                        $scope.total = $scope.cart.reduce((acc, cur) => {
+                            return acc + Number(cur.qty) * Number(cur.gia)
+                        }, 0)
+                    })
+            }
+
+            $scope.removeCart = (id) => {
+                for (i = 0; i < $scope.cartId.length; i++) {
+                    if ($scope.cart[i].id == id) {
+                        $scope.cart.splice(i, 1)
+                        $scope.cartId.splice(i, 1)
+                        break
+                    }
+                }
+                localStorage.setItem('cart', JSON.stringify($scope.cartId))
+                $scope.numberCart = $scope.cart.length
+                $scope.total = $scope.cart.reduce((acc, cur) => {
+                    return acc + Number(cur.qty) * Number(cur.gia)
+                }, 0)
+            }
+
+            $scope.register = () => {
+                let check = true
+
+                $scope.validate = {
+                    email: "",
+                    password: ""
+                }
+                if ($scope.inputReg.email == "") {
+                    $scope.validate.email = "Trường email không được để trống!"
+                    check = false
+                } else if (!$scope.inputReg.email.includes("@")) {
+                    $scope.validate.email = "Trường email phải có định dạng email!"
+                    check = false
+                }
+
+                if ($scope.inputReg.password == "") {
+                    $scope.validate.password = "Trường password không được để trống!"
+                    check = false
+                } else if ($scope.inputReg.password.length < 6) {
+                    $scope.validate.password = "Trường password phải có ít nhất 6 ký tự!"
+                    check = false
+                }
+                if (check) {
+                    $http.get('http://localhost:3000/users')
+                        .then(res => {
+                            let users = res.data
+
+                            users.forEach(user => {
+                                if (user.email == $scope.inputReg.email) {
+                                    $scope.validate.email = "Email này đã tồn tại!"
+                                    check = false
+                                    return
+                                }
+                            })
+                            if (check) {
+                                let user = {
+                                    "email": $scope.inputReg.email,
+                                    "password": $scope.inputReg.password,
+                                    "role": 1
+                                }
+                                $http.post('http://localhost:3000/users', user)
+                                    .then(res => {
+                                        user = res.data
+                                        localStorage.setItem("user.email", user.email);
+                                        localStorage.setItem("user.role", user.role);
+                                        localStorage.setItem("user.id", user.id);
+                                        $scope.user = {
+                                            id: localStorage.getItem('user.id'),
+                                            email: localStorage.getItem('user.email'),
+                                            role: localStorage.getItem('user.role'),
+                                        }
+                                        document.querySelector('#exampleRegister').querySelector('.btn-close').click()
+                                    })
+                            }
+
+                        })
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>

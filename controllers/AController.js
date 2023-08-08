@@ -1,0 +1,3 @@
+window.AController = function($scope) {
+    
+}

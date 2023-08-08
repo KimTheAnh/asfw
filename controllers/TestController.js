@@ -1,0 +1,3 @@
+window.TestController = function($scope) {
+    
+}

@@ -1,0 +1,45 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "ten": "Iphone",
+      "hang": 1,
+      "gia": 100000,
+      "img": "1.jpg"
+    },
+    {
+      "id": 2,
+      "ten": "Iphone",
+      "hang": 1,
+      "gia": 100000,
+      "img": "2.jpg"
+    },
+    {
+      "id": 3,
+      "ten": "Iphone",
+      "hang": 1,
+      "gia": 100000,
+      "img": "3.jpg"
+    },
+    {
+      "ten": "a",
+      "gia": "123",
+      "hang": "2",
+      "id": 4
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "email": "a@gmail.com",
+      "password": "123456",
+      "role": 2
+    },
+    {
+      "email": "abc@gmail.com",
+      "password": "123456",
+      "role": 1,
+      "id": 2
+    }
+  ]
+}
